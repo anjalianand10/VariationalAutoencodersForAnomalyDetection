@@ -3,7 +3,7 @@ This repository contains all the required code for the assignment
 
 Introduction: Although VAEs were principally designed as generative models for image and text generation, we exploit these qualities to be leveraged in the anomaly detection domain. 
 
-Dataset: The NAB corpus conntains 58 timeseries data files designed to provide data for research in streaming anomaly detection. For this project we use the data from machine_temperature_system_failure.csv. The combined windowed labels are taken to check for the anomalies. 
+Dataset: The [NAB](https://github.com/numenta/NAB) corpus conntains 58 timeseries data files designed to provide data for research in streaming anomaly detection. For this project we use the data from machine_temperature_system_failure.csv. The combined windowed labels are taken to check for the anomalies. 
 
 VAE.ipynb: We just tested our model for a non time series dataset (KDD Cup 1999 Dataset), where it worked pretty well. 
 
