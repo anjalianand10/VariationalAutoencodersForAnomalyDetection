@@ -4,9 +4,8 @@ from model.encoder import encoder
 from model.decoder import decoder
 from model.VAELossLayer import VAELossLayer
 
-def VAEModel(input_dim, intermediate_dim, latent_dim, beta=0.05):
+def VAEModel(input_shape, intermediate_dim, latent_dim, beta=0.05):
 
-    input_shape = (input_dim,)
     inputs = Input(shape=input_shape, name='encoder_input')
 
     # Build the encoder
