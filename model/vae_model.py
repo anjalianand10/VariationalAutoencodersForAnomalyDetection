@@ -1,22 +1,37 @@
+import tensorflow as tf
+import keras
+from keras.layers import Input, Dense, Lambda
 from keras.models import Model
-from keras.layers import Input
-from model.encoder import encoder
-from model.decoder import decoder
-from model.VAELossLayer import VAELossLayer
+from keras import optimizers
 
-def VAEModel(input_shape, intermediate_dim, latent_dim, beta=0.05):
+def vae_model(train):
+    from utils.sample import sample
+    from model.VAELossLayer import VAELossLayer
+
+    original_dim = train.shape[1]
+    input_shape = (original_dim,)
+    intermediate_dim = int(original_dim / 2)
+    latent_dim = int(original_dim / 3)
 
     inputs = Input(shape=input_shape, name='encoder_input')
 
-    # Build the encoder
-    enc, z_mean, z_log_var = encoder(input_shape, intermediate_dim, latent_dim)
+    x = Dense(intermediate_dim, activation='relu')(inputs)
+    z_mean = Dense(latent_dim, name='z_mean')(x)
+    z_log_var = Dense(latent_dim, name='z_log_var')(x)
+    z = Lambda(sample, output_shape=(latent_dim,), name='z')([z_mean, z_log_var])
+    encoder = Model(inputs, z, name='encoder')
 
-    # Build the decoder
-    dec = decoder(latent_dim, intermediate_dim, input_dim)
+    latent_inputs = Input(shape=(latent_dim,), name='z_sampling')
+    x = Dense(intermediate_dim, activation='relu')(latent_inputs)
+    outputs = Dense(original_dim, activation='sigmoid')(x)
+    decoder = Model(latent_inputs, outputs, name='decoder')
 
-    # Build the VAE loss layer
-    outputs = dec(enc(inputs))
-    vae_loss_layer = VAELossLayer()([inputs, outputs, z_mean, z_log_var, beta])
+    outputs = decoder(encoder(inputs))
+    vae_loss_layer = VAELossLayer()([inputs, outputs, z_mean, z_log_var])
 
-    vae_model = Model(inputs, [outputs, vae_loss_layer], name='vae_mlp') 
+    vae_model = Model(inputs, [outputs, vae_loss_layer], name='vae_mlp')
+    opt = optimizers.Adam(learning_rate=0.0001, clipvalue=0.5)
+
+    vae_model.compile(optimizer=opt, loss=lambda y_true, y_pred: y_pred)
+    
     return vae_model
