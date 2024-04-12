@@ -5,7 +5,7 @@ from keras.models import Model
 from keras import optimizers
 
 def vae_model(train):
-    from utils.sample import sample
+    from utils.functions import sample
     from model.VAELossLayer import VAELossLayer
 
     original_dim = train.shape[1]

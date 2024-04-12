@@ -6,7 +6,7 @@ from keras import backend as K
 
 
 def vae_window(train, latent_dim=8):
-    from utils.sample import sample
+    from utils.functions import sample
     from model.VAELossLayer import VAELossLayer
     encoder_inputs = Input(shape=(train.shape[1], train.shape[2]))
     x = layers.Conv1D(filters=32, kernel_size=7, padding="same", strides=2, activation="relu")(encoder_inputs)
