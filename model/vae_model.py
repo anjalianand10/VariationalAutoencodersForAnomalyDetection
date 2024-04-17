@@ -1,6 +1,6 @@
 import tensorflow as tf
 import keras
-from keras.layers import Input, Dense, Lambda
+from keras.layers import Input, Dense, Lambda, Dropout
 from keras.models import Model
 from keras import optimizers
 
@@ -17,12 +17,14 @@ def vae_model(train):
 
     x = Dense(intermediate_dim, activation='relu')(inputs)
     z_mean = Dense(latent_dim, name='z_mean')(x)
+    x = Dropout(0.5)(x)
     z_log_var = Dense(latent_dim, name='z_log_var')(x)
     z = Lambda(sample, output_shape=(latent_dim,), name='z')([z_mean, z_log_var])
     encoder = Model(inputs, z, name='encoder')
 
     latent_inputs = Input(shape=(latent_dim,), name='z_sampling')
     x = Dense(intermediate_dim, activation='relu')(latent_inputs)
+    x = Dropout(0.5)(x)
     outputs = Dense(original_dim, activation='sigmoid')(x)
     decoder = Model(latent_inputs, outputs, name='decoder')
 
