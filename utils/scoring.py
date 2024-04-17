@@ -2,17 +2,9 @@ import numpy as np
 import math
 from datetime import datetime
 
-def is_anomaly(timestamp, anomaly_ranges):
-    timestamp = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f")
-    for start, end in anomaly_ranges:
-        start = datetime.strptime(start, "%Y-%m-%d %H:%M:%S.%f")
-        end = datetime.strptime(end, "%Y-%m-%d %H:%M:%S.%f")
-        if start <= timestamp <= end:
-            return True
-    return False
-
 
 def score_fn(anomaly_ts, anomaly_ranges):
+    from utils.functions import is_anomaly
     # Initialization
     Atp = 1
     Afn = -1
