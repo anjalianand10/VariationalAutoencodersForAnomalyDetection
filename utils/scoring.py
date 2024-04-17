@@ -4,7 +4,6 @@ from datetime import datetime
 
 
 def score_fn(anomaly_ts, anomaly_ranges):
-    from utils.functions import is_anomaly
     # Initialization
     Atp = 1
     Afn = -1

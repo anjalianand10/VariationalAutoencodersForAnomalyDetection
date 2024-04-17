@@ -23,12 +23,3 @@ def create_sequences(values, time_steps):
     for i in range(len(values) - time_steps + 1):
         output.append(values[i : (i + time_steps)])
     return np.stack(output)
-
-def is_anomaly(timestamp, anomaly_ranges):
-    timestamp = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f")
-    for start, end in anomaly_ranges:
-        start = datetime.strptime(start, "%Y-%m-%d %H:%M:%S.%f")
-        end = datetime.strptime(end, "%Y-%m-%d %H:%M:%S.%f")
-        if start <= timestamp <= end:
-            return True
-    return False
