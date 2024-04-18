@@ -9,13 +9,10 @@ def score_fn(anomaly_ts, anomaly_ranges):
     Afn = -1
     Afp = -0.11
     fd = 0
-    anomaly_ranges = [(datetime.strptime(start, "%Y-%m-%d %H:%M:%S.%f"), 
-                       datetime.strptime(end, "%Y-%m-%d %H:%M:%S.%f")) for start, end in anomaly_ranges]
     scores = []
     results = []
     undetected_windows = set(anomaly_ranges)
     for ts in anomaly_ts:
-        ts = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S.%f")
         for start, end in anomaly_ranges:
             if start <= ts <= end:
                 if (start, end) not in scores:
